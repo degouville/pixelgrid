@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pixel Grid 2</title>
+  <style>
+    body {
+      padding: 0;
+      margin: 0;
+    }
+
+    canvas {
+      background: black;
+      /* position: absolute;
+      width: 100%;
+      height: 100%; */
+    }
+  </style>
+</head>
+
+<body></body>
+
+<script>
+  var canvas = document.createElement('canvas'),
+    ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  document.body.appendChild(canvas);
+  var NumberLine = /** @class */ (function () {
+    function NumberLine(lowerBound, upperBound, scale) {
+      this.lowerBound = lowerBound;
+      this.upperBound = upperBound;
+      this.scale = scale;
+    }
+    NumberLine.prototype.draw = function (ctx) {
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.lineTo(300, 150);
+      ctx.stroke();
+    };
+    return NumberLine;
+  }());
+  var numberLine = new NumberLine(-2, 4, 0.1);
+  var MaterialPixelGrid = /** @class */ (function () {
+    function MaterialPixelGrid() {}
+    Object.defineProperty(MaterialPixelGrid, "size", {
+      // Size of the pixel.
+      get: function () {
+        return 10;
+      },
+      enumerable: false,
+      configurable: true
+    });
+    // Draw all the pixels.
+    MaterialPixelGrid.draw = function () {
+      for (var i = 0; i < window.innerWidth; i += this.size) {
+        for (var j = 0; j < window.innerHeight; j += this.size) {
+          ctx.beginPath();
+          ctx.fillStyle = this.color;
+          ctx.fillRect(i + 1, j + 1, this.size - 1, this.size - 1);
+          ctx.stroke();
+        }
+      }
+    };
+    // Change single pixel.
+    MaterialPixelGrid.change = function () {
+      var x = Math.floor(Math.random() * window.innerWidth / this.size) * this.size,
+        y = Math.floor(Math.random() * window.innerHeight / this.size) * this.size;
+      ctx.beginPath();
+      ctx.fillStyle = this.color;
+      ctx.fillRect(x + 1, y + 1, this.size - 1, this.size - 1);
+      ctx.stroke();
+    };
+    Object.defineProperty(MaterialPixelGrid, "color", {
+      // Gets random material design color.
+      get: function () {
+        var colors = Object.keys(this.colors),
+          color = colors[colors.length * Math.random() << 0],
+          shades = Object.keys(this.colors[color]),
+          shade = shades[shades.length * Math.random() << 0];
+        return this.colors[color][shade];
+      },
+      enumerable: false,
+      configurable: true
+    });
+    Object.defineProperty(MaterialPixelGrid, "colors", {
+      // Gets all material design colors.
+      get: function () {
+        return {
+          "a": {
+            "50": "hsl(0, 0%, 0%)"
+          },
+          "b": {
+            "50": "hsl(0, 0%, 2%)"
+          },
+          "c": {
+            "50": "hsl(0, 0%, 4%)"
+          },
+          "d": {
+            "50": "hsl(0, 0%, 6%)"
+          },
+          "e": {
+            "50": "hsl(0, 0%, 8%) "
+          },
+          "f": {
+            "50": "hsl(0, 0%, 10%)"
+          },
+          "g": {
+            "50": "hsl(0, 0%, 12%)"
+          },
+          "h": {
+            "50": "hsl(0, 0%, 14%)"
+          },
+          "i": {
+            "50": "hsl(0, 0%, 16%)"
+          },
+          "j": {
+            "50": "hsl(0, 0%, 18%)"
+          },
+          "k": {
+            "50": "hsl(0, 0%, 20%)"
+          },
+          "aa": {
+            "50": "hsl(0, 0%, 0%)"
+          },
+          "ab": {
+            "50": "hsl(0, 0%, 2%)"
+          },
+          "ac": {
+            "50": "hsl(0, 0%, 4%)"
+          },
+          "ad": {
+            "50": "hsl(0, 0%, 6%)"
+          },
+          "ae": {
+            "50": "hsl(0, 0%, 8%) "
+          },
+          "af": {
+            "50": "hsl(0, 0%, 10%)"
+          },
+          "ag": {
+            "50": "hsl(0, 0%, 12%)"
+          },
+          "ah": {
+            "50": "hsl(0, 0%, 14%)"
+          },
+          "ai": {
+            "50": "hsl(0, 0%, 16%)"
+          },
+          "aj": {
+            "50": "hsl(0, 0%, 18%)"
+          },
+          "ak": {
+            "50": "hsl(0, 0%, 20%)"
+          },
+          "green": {
+            "50": "#6c5",
+          },
+          "red": {
+            "50": "#F00",
+          },
+          "yellow": {
+            "50": "#FF0",
+          }
+        };
+      },
+      enumerable: false,
+      configurable: true
+    });
+    return MaterialPixelGrid;
+  }());
+  // Initial draw.
+  MaterialPixelGrid.draw();
+  // Redraw and resize when viewport resizes.
+  window.addEventListener("resize", function () {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    MaterialPixelGrid.draw();
+  });
+  // Randomly change pixel.
+  // setInterval(function() {
+  //   MaterialPixelGrid.change();
+  // }, 0);
+  function step(timestamp) {
+    console.log(timestamp);
+    MaterialPixelGrid.change();
+    MaterialPixelGrid.change();
+    MaterialPixelGrid.change();
+    MaterialPixelGrid.change();
+    MaterialPixelGrid.change();
+    window.requestAnimationFrame(step);
+  }
+  window.requestAnimationFrame(function () {
+    window.requestAnimationFrame(step);
+  });
+</script>
+
+</html>
